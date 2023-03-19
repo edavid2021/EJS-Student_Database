@@ -10,7 +10,41 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 //ejs
 app.set('view engine', 'ejs');
+//mongoose
+const mongoose = require('mongoose');
+
 app.use(express.static('./public'));
+
+//connecting mongo through mongoose
+mongoose.connect("mongodb+srv://edavid2021:Z23619905@cluster0.nva3dco.mongodb.net/?retryWrites=true&w=majority")
+
+//schema
+const studentSchema = new mongoose.Schema({
+  _id: {
+    required: true,
+    type: Number
+  },
+  first_name: {
+    required: true,
+    type: String
+  },
+  last_name: {
+    required: true,
+    type: String
+  },
+  gpa: {
+    required: true,
+    type: String
+  },
+  enrolled: {
+    required: true,
+    type: String
+  }
+})
+
+//model for the schema
+const Model = mongoose.model("Students", studentSchema) //student or data
+
 
 /**
  * posts student data into a .json file
@@ -21,8 +55,24 @@ app.use(express.static('./public'));
  * @param {boolean} enrolled - enrolled status of student
  * @returns {object} - returns a json object with record_id and message
  */
-app.post('/students', function(req, res) {
+app.post('/students',async function(req, res) {
   var record_id = new Date().getTime();
+
+  let flag = await Model.findOne({ first_name: req.body.first_name, last_name: req.body.last_name })
+  if (flag) {   //if the data already exists
+    return res.status(400).send("Student already exists"); //bad request
+  }
+
+//formatting for the data
+  const data = new Model({
+    _id: req.body.id,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    gpa: req.body.gpa,
+    enrolled: req.body.enrolled
+  })
+  await data.save();
+  console.log(data);
 
   var obj = {};
   obj.record_id = record_id;
@@ -31,20 +81,7 @@ app.post('/students', function(req, res) {
   obj.gpa = req.body.gpa;
   obj.enrolled = req.body.enrolled;
 
-  var str = JSON.stringify(obj, null, 2);
-
-  fs.writeFile("students/" + record_id + ".json", str, function(err) {
-    var rsp_obj = {};
-    if(err) {
-      rsp_obj.record_id = -1;
-      rsp_obj.message = 'error - unable to create resource';
-      return res.status(200).send(rsp_obj);
-    } else {
-      rsp_obj.record_id = record_id;
-      rsp_obj.message = 'successfully created';
-      return res.status(201).send(rsp_obj);
-    }
-  }); //end writeFile method
+  return res.status(200).send("Successfully added student");
   
 }); //end post method
 
@@ -212,10 +249,6 @@ app.get('/list', function (req, res) {
 app.get('/', function (req, res) {
   res.render('index');
  });
-
-
-
-
 
 app.listen(5678); //start the server
 console.log('Server is running...');
