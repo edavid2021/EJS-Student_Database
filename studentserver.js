@@ -47,7 +47,7 @@ const Model = mongoose.model("Students", studentSchema) //student or data
 
 
 /**
- * posts student data into a .json file
+ * posts student data into the MongoDB database
  * @function POST_METHOD
  * @param {string} record_id - record id of student
  * @param {string} last_name - last name of student
@@ -63,7 +63,6 @@ app.post('/students',async function(req, res) {
   if (flag) {   //if the data already exists
     return res.status(400).send("Student already exists"); //bad request
   }
-
 //creating a new document with the format of the schema
   const data = new Model({
     _id: req.body.id,
@@ -84,11 +83,10 @@ app.post('/students',async function(req, res) {
   obj.enrolled = req.body.enrolled;
 
   return res.status(200).send("Successfully added student");
-  
-}); //end post method
+});
 
 /**
- * gets a student record file
+ * gets a student record file from the MongoDB database
  * @function GET_METHOD
  * @param {string} record_id - record id of student
  * @param {string} first_name - first name of student
@@ -128,7 +126,7 @@ app.get('/students', async function (req, res) {
   let { first, last } = req.query;//gets the query parameters
 
   //if the query parameters are not empty
-  if (first && last) { 
+  if (first || last) { 
     var regexp = new RegExp("^" + first); //regex for first name
     var regexp2 = new RegExp("^" + last); //regex for last name
     let students = await Model.find({ first_name: regexp, last_name: regexp2 }); //finds the students with the first and last name
@@ -146,7 +144,7 @@ app.get('/students', async function (req, res) {
 });
 
 /**
- * updates a student record file
+ * updates a student record file from the MongoDB database
  * @function PUT_METHOD
  * @param {string} record_id - record id of student
  * @param {string} first_name - first name of student
@@ -159,10 +157,11 @@ app.put('/students/:record_id', async function (req, res) {
   //update the file by record_id
   let students = await Model.updateOne({ _id: req.params.record_id }, {first_name: req.body.first_name, last_name: req.body.last_name, gpa: req.body.gpa, enrolled: req.body.enrolled});
   return res.status(200).send(students);
-}); //end put method
+
+}); 
 
 /**
- * deletes a student record
+ * deletes a student record file from the MongoDB database
  * @function DELETE_METHOD
  * @param {string} record_id - record id of student
  * @param {string} first_name - first name of student
@@ -171,12 +170,13 @@ app.put('/students/:record_id', async function (req, res) {
  * @param {boolean} enrolled - enrolled status of student
  * @returns {object} - returns a json object with record_id and message
  */
-app.delete('/students/:record_id', async function (req, res) {
-  //delete the file by record_id 
-  console.log("function called");
-  await Model.findOneAndDelete({ _id: req.params.record_id }); 
-  return res.status(200).send("data deleted");
-}); //end delete method
+app.delete('/students/:record_id', async function (req, res) { //delete the file by record_id 
+  //finds the student and deletes it
+  let students = await Model.findOneAndDelete({ _id: req.params.record_id }); 
+  return res.status(200).send(students);
+
+});
+
 
 //render addStudent.ejs page
 app.get('/add', function (req, res) {

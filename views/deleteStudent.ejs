@@ -24,6 +24,8 @@
       <button class="btn-primary" onClick="deleteStudent()">
         Delete Student
       </button>
+
+      <div id="mydiv"></div>
       <br />
       <br />
       <script>
@@ -34,8 +36,8 @@
           $.ajax({
             url: urla,
             type: "delete",
-            success: function (response) {
-              $("#mydiv").text("Sucesfully Deleted" + response);
+            success: function () {
+              $("#mydiv").text("Student deleted successfully");
             },
             error: function (xhr) {
               $("#mydiv").text("error: " + xhr);

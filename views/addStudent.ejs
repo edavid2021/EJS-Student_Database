@@ -60,8 +60,8 @@
               gpa: gpa_val,
               enrolled: enrolled_val,
             },
-            success: function () {
-              $("#mydiv").text("success");
+            success: function (response) {
+              $("#mydiv").text(response);
             },
             error: function (xhr) {
               $("#mydiv").text("error: " + xhr);
