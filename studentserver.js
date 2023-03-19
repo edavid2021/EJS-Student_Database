@@ -8,6 +8,8 @@ const glob = require("glob")
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
+//ejs
+app.set('view engine', 'ejs');
 app.use(express.static('./public'));
 
 /**
@@ -185,6 +187,35 @@ app.delete('/students/:record_id', function(req, res) {
   });
 
 }); //end delete method
+
+//render addStudent.ejs page
+app.get('/add', function (req, res) {
+  res.render('addStudent');
+});
+//render updateStudent.ejs page
+app.get('/update', function (req, res) {
+  res.render('updateStudent');
+});
+//render deleteStudent.ejs page
+app.get('/delete', function (req, res) {
+  res.render('deleteStudent');
+});
+//render getStudent.ejs page
+app.get('/get', function (req, res) {
+  res.render('displayStudent');
+});
+//render listStudents.ejs page
+app.get('/list', function (req, res) {
+  res.render('listStudents');
+});
+//render index.ejs page
+app.get('/', function (req, res) {
+  res.render('index');
+ });
+
+
+
+
 
 app.listen(5678); //start the server
 console.log('Server is running...');
