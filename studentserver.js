@@ -74,6 +74,7 @@ app.post('/students',async function(req, res) {
   await data.save();
   console.log(data);
 
+  //writing to the file
   var obj = {};
   obj.record_id = record_id;
   obj.first_name = req.body.first_name;
@@ -97,7 +98,7 @@ app.post('/students',async function(req, res) {
  */
 app.get('/students/:record_id', async function(req, res) {
 
-  let student = await Model.findOne({ _id: req.params.record_id });
+  let student = await Model.findOne({ _id: req.params.record_id }); //finds the student
   console.log(student);
   res.status(200).send(student);
 }); 
