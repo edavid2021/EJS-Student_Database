@@ -123,17 +123,9 @@ function readFiles(files,arr,res) {
   });  
 }
 
-app.get('/students', function(req, res) {
-  var obj = {};
-  var arr = [];
-  filesread = 0;
-
-  glob("students/*.json", null, function (err, files) {
-    if (err) {
-      return res.status(500).send({"message":"error - internal server error"});
-    }
-    readFiles(files,[],res);
-  });
+app.get('/students', async function(req, res) {
+  let students = await Model.find({}); //finds all the students
+  res.status(200).send(students);
 
 });
 
