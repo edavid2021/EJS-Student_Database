@@ -95,19 +95,11 @@ app.post('/students',async function(req, res) {
  * @param {boolean} enrolled - enrolled status of student
  * @returns {object} - returns a json object with record_id and message
  */
-app.get('/students/:record_id', function(req, res) {
-  var record_id = req.params.record_id;
+app.get('/students/:record_id', async function(req, res) {
 
-  fs.readFile("students/" + record_id + ".json", "utf8", function(err, data) {
-    if (err) {
-      var rsp_obj = {};
-      rsp_obj.record_id = record_id;
-      rsp_obj.message = 'error - resource not found';
-      return res.status(404).send(rsp_obj);
-    } else {
-      return res.status(200).send(data);
-    }
-  });
+  let student = await Model.findOne({ _id: req.params.record_id });
+  console.log(student);
+  res.status(200).send(student);
 }); 
 
 function readFiles(files,arr,res) {
