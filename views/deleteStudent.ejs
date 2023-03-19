@@ -9,8 +9,8 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
- <!--includes navbar.ejs-->
-    <%- include('partials/navbar') %>
+    <!--navbar-->
+       <%- include('partials/navbar') %>
   </head>
 
   <body>
@@ -25,24 +25,22 @@
       <button class="btn-primary" deleteStudent()">Delete Student</button>
       <br />
       <br /> 
-      <div id="mydiv" name="mydiv"></div>
     <script>
       function deleteStudent() {
         var rID_val = $("#rID").val();
-        var urla = "http://localhost:5678/students/" + rID_val;
-        console.log(urla);
+        var urla = "http://localhost:5678/students/"; //+ rID_val;
+
         $.ajax({
           url: urla,
           type: "delete",
           success: function (response) {
-           $("#mydiv").text(response);
+            $("#mydiv").text("Sucesfully Deleted" + response);
           },
           error: function (xhr) {
             $("#mydiv").text("error: " + xhr);
           },
         });
       }
-      
     </script>
     </div>
 

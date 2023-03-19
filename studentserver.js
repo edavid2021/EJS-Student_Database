@@ -56,14 +56,15 @@ const Model = mongoose.model("Students", studentSchema) //student or data
  * @returns {object} - returns a json object with record_id and message
  */
 app.post('/students',async function(req, res) {
-  var record_id = new Date().getTime();
+  var record_id = new Date().getTime(); 
 
+  //checks if the data already exists
   let flag = await Model.findOne({ first_name: req.body.first_name, last_name: req.body.last_name })
   if (flag) {   //if the data already exists
     return res.status(400).send("Student already exists"); //bad request
   }
 
-//formatting for the data
+//creating a new document with the format of the schema
   const data = new Model({
     _id: req.body.id,
     first_name: req.body.first_name,
@@ -172,37 +173,42 @@ app.put('/students/:record_id', async function (req, res) {
  * @param {boolean} enrolled - enrolled status of student
  * @returns {object} - returns a json object with record_id and message
  */
-app.delete('/students/:record_id', async function (req, res) {
+app.delete('/delete', async function (req, res) {
   //delete the file by record_id 
-  await Model.deleteOne({ _id: req.params.record_id });
+  console.log("function called");
+  await Model.deleteOne({ _id: req.params.record_id }); 
   return res.status(200).send("data deleted");
-
 }); //end delete method
 
 //render addStudent.ejs page
 app.get('/add', function (req, res) {
   res.render('addStudent');
 });
+
 //render updateStudent.ejs page
 app.get('/update', function (req, res) {
   res.render('updateStudent');
 });
+
 //render deleteStudent.ejs page
 app.get('/delete', function (req, res) {
   res.render('deleteStudent');
 });
+
 //render getStudent.ejs page
 app.get('/get', function (req, res) {
   res.render('displayStudent');
 });
+
 //render listStudents.ejs page
 app.get('/list', function (req, res) {
   res.render('listStudents');
 });
+
 //render index.ejs page
 app.get('/', function (req, res) {
   res.render('index');
- });
+});
 
 app.listen(5678); //start the server
 console.log('Server is running...');
