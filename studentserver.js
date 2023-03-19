@@ -123,10 +123,27 @@ function readFiles(files,arr,res) {
   });  
 }
 
-app.get('/students', async function(req, res) {
-  let students = await Model.find({}); //finds all the students
-  return res.status(200).send(students);
+app.get('/students', async function (req, res) {
+  let { first, last } = req.query;//gets the query parameters
 
+  //if the query parameters are not empty
+  if (first && last) { 
+    var regexp = new RegExp("^" + first);
+    var regexp2 = new RegExp("^" + last);
+    let students = await Model.find({ first_name: regexp, last_name: regexp2 });
+    //finds the students with the first and last name
+    if (students.length > 0) {
+      return res.status(200).send(students);
+    } 
+  }
+  //if the query parameters are empty
+  else {
+    let students = await Model.find({}); //finds all the students
+    return res.status(200).send(students); 
+  }
+  
+    //returns all the students
+  
 });
 
 /**
@@ -157,11 +174,8 @@ app.put('/students/:record_id', async function (req, res) {
  */
 app.delete('/students/:record_id', async function (req, res) {
   //delete the file by record_id 
-  let record_id = req.params.record_id;
-  console.log(record_id);
-  const data = await Model.deleteOne({ _id: req.params.record_id });
-  console.log(data);
-  return res.status(200).send(data);
+  await Model.deleteOne({ _id: req.params.record_id });
+  return res.status(200).send("data deleted");
 
 }); //end delete method
 

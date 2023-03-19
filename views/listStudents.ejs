@@ -9,7 +9,6 @@
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
     <style>
       table {
         border-collapse: collapse;
@@ -60,7 +59,10 @@
 
       <script>
         function listStudents() {
-          var urla = "http://localhost:5678/students";
+          let params = window.location.search; //gets the query string
+          console.log(params);
+
+          var urla = "http://localhost:5678/students" + params;
 
           $.ajax({
             url: urla,
