@@ -125,7 +125,7 @@ function readFiles(files,arr,res) {
 
 app.get('/students', async function(req, res) {
   let students = await Model.find({}); //finds all the students
-  res.status(200).send(students);
+  return res.status(200).send(students);
 
 });
 
@@ -139,46 +139,10 @@ app.get('/students', async function(req, res) {
  * @param {boolean} enrolled - enrolled status of student
  * @returns {object} - returns a json object with record_id and message
  */
-app.put('/students/:record_id', function(req, res) {
-  var record_id = req.params.record_id;
-  var fname = "students/" + record_id + ".json";
-  var rsp_obj = {};
-  var obj = {};
-
-  obj.record_id = record_id;
-  obj.first_name = req.body.first_name;
-  obj.last_name = req.body.last_name;
-  obj.gpa = req.body.gpa;
-  obj.enrolled = req.body.enrolled;
-
-  var str = JSON.stringify(obj, null, 2);
-
-  //check if file exists
-  fs.stat(fname, function(err) {
-    if(err == null) {
-
-      //file exists
-      fs.writeFile("students/" + record_id + ".json", str, function(err) {
-        var rsp_obj = {};
-        if(err) {
-          rsp_obj.record_id = record_id;
-          rsp_obj.message = 'error - unable to update resource';
-          return res.status(200).send(rsp_obj);
-        } else {
-          rsp_obj.record_id = record_id;
-          rsp_obj.message = 'successfully updated';
-          return res.status(201).send(rsp_obj);
-        }
-      });
-      
-    } else {
-      rsp_obj.record_id = record_id;
-      rsp_obj.message = 'error - resource not found';
-      return res.status(404).send(rsp_obj);
-    }
-
-  });
-
+app.put('/students/:record_id', async function (req, res) {
+  //update the file by record_id
+  let students = await Model.updateOne({ _id: req.params.record_id }, {first_name: req.body.first_name, last_name: req.body.last_name, gpa: req.body.gpa, enrolled: req.body.enrolled});
+  return res.status(200).send(students);
 }); //end put method
 
 /**
@@ -191,22 +155,13 @@ app.put('/students/:record_id', function(req, res) {
  * @param {boolean} enrolled - enrolled status of student
  * @returns {object} - returns a json object with record_id and message
  */
-app.delete('/students/:record_id', function(req, res) {
-  var record_id = req.params.record_id;
-  var fname = "students/" + record_id + ".json";
-
-  fs.unlink(fname, function(err) {
-    var rsp_obj = {};
-    if (err) {
-      rsp_obj.record_id = record_id;
-      rsp_obj.message = 'error - resource not found';
-      return res.status(404).send(rsp_obj);
-    } else {
-      rsp_obj.record_id = record_id;
-      rsp_obj.message = 'record deleted';
-      return res.status(200).send(rsp_obj);
-    }
-  });
+app.delete('/students/:record_id', async function (req, res) {
+  //delete the file by record_id 
+  let record_id = req.params.record_id;
+  console.log(record_id);
+  const data = await Model.deleteOne({ _id: req.params.record_id });
+  console.log(data);
+  return res.status(200).send(data);
 
 }); //end delete method
 
