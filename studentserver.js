@@ -2,7 +2,8 @@
 
 const express = require('express')
 const app = express()
-const bodyParser = require('body-parser');
+//parsing is used to convert the data into a format that is easy to read
+const bodyParser = require('body-parser'); 
 const fs = require('fs');
 const glob = require("glob")
 
