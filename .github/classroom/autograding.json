@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "Convert your navbar to be done via EJS and should be included in each HTML page",
+      "setup": "",
+      "run": "git grep \"navbar|ul|li\" *.ejs",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 20
+    },
+    {
+      "name": "Convert Each of your html pages to be ejs views as shown in class",
+      "setup": "",
+      "run": "git grep \"<div\" *.ejs",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 20
+    }
+  ]
+}
