@@ -1,8 +1,45 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
+<!-- Navbar for Home Page -->
+<nav class="navbar navbar-default" id="home-navbar">
+  <div class="container container-fluid">
+    <div class="navbar-header">
+      <button
+        type="button"
+        class="navbar-toggle"
+        data-toggle="collapse"
+        data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Student Database</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a style="background-color: #ddd" href="index.html">Home</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#"
+            >Students<span class="caret"></span
+          ></a>
+          <ul class="dropdown-menu">
+            <li><a href="/add">Add Student</a></li>
+            <li><a href="/update">Update Student</a></li>
+            <li><a href="/delete">Delete Student</a></li>
+            <li><a href="/get">Display Student</a></li>
+            <li><a href="/list">List All</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Navbar for Other Pages -->
+<nav class="navbar navbar-default" id="other-navbar">
+  <div class="container container-fluid">
     <div class="navbar-header"></div>
-    <ol class="nav navbar-nav">
-      <li><a href="/">Home</a></li>
+    <a class="navbar-brand" href="/">Student Database</a>
+    <ol class="nav navbar-nav navbar-right">
+      <li><a href="/" class="active">Home</a></li>
       <li><a href="/add">Add Student</a></li>
       <li><a href="/update">Update Student</a></li>
       <li><a href="/delete">Delete Student</a></li>
@@ -12,26 +49,40 @@
   </div>
 </nav>
 
-<!-- Script that highlights the list item with the current url on the navbar -->
+<!--
+  Script that highlights the current nav list item
+  Script that hides the home page navbar
+  Style that gives the active nav links color
+ -->
 <script>
-  $(function () {
-    $("a").each(function () {
-      if ($(this).prop("href") == window.location.href) {
-        $(this).addClass("active");
-      }
-    });
+  // Script that highlights the current nav list item
+  $(document).ready(function () {
+    var pathname = window.location.pathname;
+    $('a[href="' + pathname + '"]')
+      .parent()
+      .addClass("active");
+  });
+
+  // Script that hides the home page navbar
+  $(document).ready(function () {
+    var pathname = window.location.pathname;
+    $('a[href="' + pathname + '"]')
+      .parent()
+      .addClass("active");
+
+    if (pathname === "/") {
+      // Show the home page navbar
+      $("#other-navbar").hide();
+    } else {
+      // Show the other pages navbar
+      $("#home-navbar").hide();
+    }
   });
 </script>
 
-<!-- style that gives the active classes color-->
+<!-- style that gives the active nav links color-->
 <style>
-  a.active {
-    background-color: #ddd;
-    color: white;
-  }
-
-  nav a.active {
-    background-color: #ddd;
-    color: red;
+  .active {
+    color: #337ab7;
   }
 </style>
